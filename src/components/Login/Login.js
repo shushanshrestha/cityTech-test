@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
 
 async function loginUser(credentials) {
 
@@ -8,7 +9,7 @@ async function loginUser(credentials) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            // 'Authorization':`Bearer ${token}`
+
         },
         body: JSON.stringify(credentials)
     })
@@ -21,6 +22,7 @@ async function loginUser(credentials) {
 }
 
 export default function Login({ setToken }) {
+    const navigation = useNavigate()
     const [username, setUserName] = React.useState();
     const [password, setPassword] = React.useState();
 
@@ -30,14 +32,15 @@ export default function Login({ setToken }) {
             login_id: username,
             login_password: password
         })
-        // .then(data => {
-        //     this.props.history.push('/')
-        // })
+
         setToken(res.data[0].jwt_token);
-        // console.log(res.data[0].jwt_token)
+        navigation("/")
+
     }
+
     return (
         <div className="login-wrapper">
+            {typeof (JSON.stringify(setToken)) === 'undefined' ? console.log('false') : console.log('true')}
             <h1>Please Log In</h1>
             <form onSubmit={handleSubmit}>
                 <label>

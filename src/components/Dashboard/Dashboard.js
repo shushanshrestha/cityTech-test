@@ -1,54 +1,9 @@
-import React, { useEffect } from 'react'
-
-// // async function data() {
-// //     const token = JSON.parse(sessionStorage.getItem('token'))
-// //     return fetch('https://jp-dev.cityremit.global/web-api/transation-manager/v1/admin/dashboard/search', {
-// //         method: 'POST',
-// //         headers: {
-// //             'Content-Type': 'application/json',
-// //             'Authorization': `Bearer ${token}`
-// //         },
-// //         body: JSON.stringify({})
-// //     })
-// //         .then(response => response.json())
-
-
-// // }
-// // data()
-// export default function Dashboard() {
-//     const token = JSON.parse(sessionStorage.getItem('token'))
-//     console.log(token, "<<<<<<<")
-//     // useEffect(() => {
-//     //     console.log("i am here")
-//     //         (async () => {
-//     //             console.log("here")
-//     //             const rawResponse = await fetch('https://jp-dev.cityremit.global/web-api/transation-manager/v1/admin/dashboard/search', {
-//     //                 method: 'POST',
-//     //                 headers: {
-//     //                     'Accept': 'application/json',
-//     //                     'Content-Type': 'application/json',
-//     //                     'Authorization': `Bearer ${token}`
-//     //                 },
-//     //                 body: JSON.stringify()
-//     //             });
-//     //             const content = await rawResponse.json();
-//     //             console.log(content);
-//     //         })();
-//     // });
-//     return (
-//         <div>Dashboard</div>
-//     )
-// }
-
-
-
-
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 export default function Dashboard() {
-
+    const [data, setData] = useState([])
+    const token = sessionStorage.getItem('token');
     useEffect(() => {
-        const token = sessionStorage.getItem('token');
-        console.log("Hello", token);
-        // const token = tt ? JSON.parse(tt) : 'I am here'
         (async () => {
             const rawResponse = await fetch('https://jp-dev.cityremit.global/web-api/transaction-manager/v1/admin/dashboard/search', {
 
@@ -60,15 +15,24 @@ export default function Dashboard() {
                 },
                 body: JSON.stringify({})
             });
-            const content = await rawResponse.json();
+            const data = await rawResponse.json();
+            setData(data.data)
 
-            console.log(content);
         })();
     });
     return (
         <div className="App">
-            <h1>Hello CodeSandbox</h1>
-            <h2>Start editing to see some magic happen!</h2>
+            <h1>This is Dashboard</h1>
+
+            {token === null ? <div>
+                <h1>access denied</h1>
+                <h3>Login to access data by clicking <Link to="/login"><b>here</b></Link></h3>
+            </div> : <div>
+                <h1>you are logged in</h1>
+                <p>{JSON.stringify(data)}</p>
+            </div>}
+
+
         </div>
     );
 }
